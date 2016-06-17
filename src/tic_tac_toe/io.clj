@@ -1,7 +1,13 @@
-(ns tic-tac-toe.io)
+(ns tic-tac-toe.io
+  (:require [tic-tac-toe.system-util :as system]))
 
-(defn get-user-input [prompt]
-  (read-line))
+(defrecord IO []
+  system/SystemUtil
+  (get-user-input [x]
+    (read-line))
 
-(defn display [output]
-  (println output))
+  (display [x output]
+    (println output)))
+
+(defn create-io []
+  (map->IO {}))
