@@ -9,6 +9,9 @@
   (find-open-spaces [x board]
     (keep-indexed #(if (nil? %2) %1) board)))
 
+(defn place-piece [board space marker]
+  (assoc board (read-string space) marker))
+
 (defn row-count [board]
   (int (Math/sqrt (count board))))
 

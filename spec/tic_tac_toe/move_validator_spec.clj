@@ -20,10 +20,6 @@
     (let [active-board [nil nil nil nil nil nil nil nil nil]]
       (should= false (validator/is-valid? "-1" active-board))))
 
-  (it "returns false if the move is zero"
-    (let [active-board [nil nil nil nil nil nil nil nil nil]]
-      (should= false (validator/is-valid? "0" active-board))))
-
   (it "returns false if the move is greater than the board size"
     (let [active-board [nil nil nil nil nil nil nil nil nil]]
       (should= false (validator/is-valid? "10" active-board))))

@@ -4,17 +4,17 @@
             [tic-tac-toe.view :as view]
             [tic-tac-toe.move-validator :as validator]))
 
-(defrecord ComputerMoveGenerator [ui io]
+(defrecord ComputerMoveGenerator [io]
   generator/MoveGenerator
   (select-space [x board]
     (let [move (rand-int (count board))]
       (loop [m move]
         (if (= (board m) nil)
-          m
+          (str m)
           (recur (rand-int (count board))))))))
 
 (defn mock-move [move]
   (map->ComputerMoveGenerator (atom move)))
 
-(defn create-computer-move-generator [ui io]
-  (map->ComputerMoveGenerator {:ui ui :io io}))
+(defn create-computer-move-generator [io]
+  (map->ComputerMoveGenerator {:io io}))
