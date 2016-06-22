@@ -9,11 +9,14 @@
   (find-open-spaces [x board]
     (keep-indexed #(if (nil? %2) %1) board)))
 
-(defn- row-count [board]
+(defn row-count [board]
   (int (Math/sqrt (count board))))
 
 (defn- board-positions [board]
   (range (count board)))
+
+(defn separate-rows [board]
+  (mapv vec (partition (row-count board) board)))
 
 (defn- find-winning-rows [board]
   (mapv vec (partition (row-count board) (board-positions board))))
