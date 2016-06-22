@@ -20,9 +20,28 @@
   
   (it "returns a valid move"
     (let [mock-io (io/mock-value "1")
-          test-ui (test-ui mock-io)]
-      (view/get-player-move test-ui)
+          test-ui (test-ui mock-io)
+          board [nil nil nil nil nil nil nil nil nil]]
+      (view/get-player-move test-ui board)
       (should= "1"
                @(:value mock-io)))))
+
+(describe "display-tie-message"
+  
+  (it "displays a tie message"
+    (let [mock-io (io/mock-value "3") 
+          test-ui (test-ui mock-io)]
+      (view/display-tie-message test-ui)
+      (should= "Game over. It's a tie."
+                @(:value mock-io)))))
+
+(describe "display-winning-message"
+  
+  (it "displays a winning message with the winner's name"
+    (let [mock-io (io/mock-value "3") 
+          test-ui (test-ui mock-io)]
+      (view/display-winning-message test-ui "Nicole")
+      (should= "Game over. Nicole won!"
+                @(:value mock-io)))))
 
 (run-specs)

@@ -4,7 +4,7 @@
 (defrecord MockIO [value]
   system/SystemUtil
   (get-user-input [x]
-    value)
+    @value)
 
   (display [x s]
     (reset! value s)
