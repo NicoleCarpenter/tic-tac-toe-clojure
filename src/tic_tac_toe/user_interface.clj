@@ -14,7 +14,9 @@
       (loop [m move]
         (if (validator/is-valid? m board)
           m
-          (recur (system/get-user-input io))))))
+          (do 
+            (system/display io "Invalid move, please select an available space\n")
+            (recur (system/get-user-input io)))))))
 
   (display-tie-message [x]
     (system/display io (str "Game over. It's a tie.")))
@@ -23,7 +25,10 @@
     (system/display io (str "Game over. " winner-name " won!")))
 
   (print-board [x board]
-    (system/display io (presenter/format-board-to-string board))))
+    (system/display io (presenter/format-board-to-string board)))
+
+  (clear-screen [x]
+    (system/clear-scr io)))
 
 (defn create-user-interface [io]
   (map->UserInterface {:io io}))

@@ -9,17 +9,11 @@
   (find-open-spaces [x board]
     (keep-indexed #(if (nil? %2) %1) board)))
 
-(defn place-piece [board space marker]
-  (assoc board (read-string space) marker))
-
 (defn row-count [board]
   (int (Math/sqrt (count board))))
 
-(defn- board-positions [board]
+(defn board-positions [board]
   (range (count board)))
-
-(defn separate-rows [board]
-  (mapv vec (partition (row-count board) board)))
 
 (defn- find-winning-rows [board]
   (mapv vec (partition (row-count board) (board-positions board))))
@@ -39,7 +33,7 @@
 
 (defn- find-winning-diagonals [board]
   (let [board-positions (board-positions board)]
-    (apply mapv vector (conj [(find-forward-diagonal board-positions)] (find-backward-diagonal board-positions)))))
+    (conj [(find-forward-diagonal board-positions)] (find-backward-diagonal board-positions))))
 
 (defn- find-winning-combinations [board]
   (concat (find-winning-rows board) (find-winning-columns board) (find-winning-diagonals board)))
@@ -62,6 +56,12 @@
 
 (defn create-ttt-board []
   (map->TTTBoard {}))
+
+(defn place-piece [board space marker]
+  (assoc board (read-string space) marker))
+
+(defn separate-rows [board]
+  (mapv vec (partition (row-count board) board)))
 
 (defn is-tie-condition-met? [board]
   (empty? (board/find-open-spaces (create-ttt-board) board)))

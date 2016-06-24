@@ -9,23 +9,39 @@
             [tic-tac-toe.board :as board]
             [tic-tac-toe.ttt-board-presenter :as presenter]))
 
-(defn- player-move [current-player board]
+(defn- player-move [current-player board game-ui]
   (let [generator (:move-generator current-player)]
-    (mg/select-space generator board)))
+    (do
+      (view/prompt-player-move game-ui (:name current-player))
+      (mg/select-space generator board))))
+
+(defn- display-current-board [board game-ui]
+  (do
+    (view/clear-screen game-ui)
+    (view/print-board game-ui (tttboard/board-positions board))
+    (view/print-board game-ui board)))
+
+(defn- game-ui [io]
+  (ui/create-user-interface io))
 
 (defn play-game [board players]
   (loop [board board players players]
-    (let [current-player (nth players 0)]
+    (let [current-player (nth players 0)
+          game-io (io/create-io)
+          game-ui (game-ui game-io)]
       (cond 
         (not= (tttboard/find-winning-marker board) nil)
           (do
-            (view/print-board (ui/create-user-interface (io/create-io)) board)
-            (view/display-winning-message (ui/create-user-interface (io/create-io) ) (tttboard/find-winning-marker board)))
+            (display-current-board board game-ui)
+            (view/display-winning-message game-ui (:name (nth players 1))))
         (tttboard/is-tie-condition-met? board)
           (do
-            (view/print-board (ui/create-user-interface (io/create-io)) board)
-            (view/display-tie-message (ui/create-user-interface (io/create-io))))
+            (display-current-board board game-ui)
+            (view/display-tie-message game-ui))
         :else
           (do
-            (view/print-board (ui/create-user-interface (io/create-io)) board)
-            (recur (tttboard/place-piece board (player-move current-player board) (:marker current-player)) (reverse players) ))))))
+            (display-current-board board game-ui)
+            (let [move (player-move current-player board game-ui)
+                  marker (:marker current-player)
+                  updated-board (tttboard/place-piece board move marker)]
+              (recur updated-board (reverse players))))))))
