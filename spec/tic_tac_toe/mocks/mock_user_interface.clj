@@ -11,7 +11,9 @@
 
   (display-tie-message [x])
 
-  (display-winning-message [x winner-name]))
+  (display-winning-message [x winner-name])
+
+  (clear-screen [x]))
 
 (defn mock-value [input]
   (->MockUserInterface (atom input)))

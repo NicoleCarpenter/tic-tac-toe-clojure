@@ -1,7 +1,8 @@
 (ns tic-tac-toe.user-interface
   (:require [tic-tac-toe.system-util :as system]
             [tic-tac-toe.view :as view]
-            [tic-tac-toe.move-validator :as validator]))
+            [tic-tac-toe.move-validator :as validator]
+            [tic-tac-toe.ttt-board-presenter :as presenter]))
 
 (defrecord UserInterface [io]
   view/View
@@ -13,13 +14,21 @@
       (loop [m move]
         (if (validator/is-valid? m board)
           m
-          (recur (system/get-user-input io))))))
+          (do 
+            (system/display io "Invalid move, please select an available space\n")
+            (recur (system/get-user-input io)))))))
 
   (display-tie-message [x]
     (system/display io (str "Game over. It's a tie.")))
 
   (display-winning-message [x winner-name]
-    (system/display io (str "Game over. " winner-name " won!"))))
+    (system/display io (str "Game over. " winner-name " won!")))
+
+  (print-board [x board]
+    (system/display io (presenter/format-board-to-string board)))
+
+  (clear-screen [x]
+    (system/clear-scr io)))
 
 (defn create-user-interface [io]
   (map->UserInterface {:io io}))

@@ -1,5 +1,6 @@
 (ns tic-tac-toe.system-util)
 
-  (defprotocol SystemUtil
-    (get-user-input [x])
-    (display [x output]))
+(defprotocol SystemUtil
+  (get-user-input [x])
+  (display [x output])
+  (clear-scr [x]))

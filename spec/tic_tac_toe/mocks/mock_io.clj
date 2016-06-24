@@ -7,8 +7,10 @@
     @value)
 
   (display [x s]
-    (reset! value s)
-    ))
+    (reset! value s))
+  
+  (clear-scr [x]
+    value))
 
 (defn mock-value [input]
   (->MockIO (atom input)))

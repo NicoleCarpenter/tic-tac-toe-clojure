@@ -5,7 +5,7 @@
 
 (defn- is-valid-space? [move board]
   (if (is-valid-number? move)
-    (and (> (read-string move) 0) (< (read-string move) (count board)))
+    (and (> (read-string move) -1) (< (read-string move) (count board)))
     false))
 
 (defn- is-open-space? [move board]
