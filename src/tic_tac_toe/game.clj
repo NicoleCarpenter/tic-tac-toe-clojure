@@ -43,5 +43,5 @@
             (display-current-board board game-ui)
             (let [move (player-move current-player board game-ui)
                   marker (:marker current-player)
-                  updated-board (tttboard/place-piece board move marker)]
+                  updated-board (tttboard/place-piece board (str move) marker)]
               (recur updated-board (reverse players))))))))
