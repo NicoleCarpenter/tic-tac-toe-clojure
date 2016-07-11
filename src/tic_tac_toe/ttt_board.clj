@@ -9,6 +9,9 @@
   (find-open-spaces [x board]
     (keep-indexed #(if (nil? %2) %1) board)))
 
+(defn find-open-spaces [board]
+    (keep-indexed #(if (not (string? %2)) %1) board))
+
 (defn row-count [board]
   (int (Math/sqrt (count board))))
 
@@ -57,6 +60,9 @@
 (defn create-ttt-board []
   (map->TTTBoard {}))
 
+(defn depth [board]
+  (count (board/find-open-spaces (create-ttt-board) board)))
+
 (defn place-piece [board space marker]
   (assoc board (read-string space) marker))
 
@@ -64,10 +70,16 @@
   (mapv vec (partition (row-count board) board)))
 
 (defn is-tie-condition-met? [board]
-  (empty? (board/find-open-spaces (create-ttt-board) board)))
+  (every? #(string? %) board))
 
 (defn find-winning-marker [board]
   (let [winning-combinations (find-winning-combinations board)]
     (first (filter (complement nil?) 
       (for [combo winning-combinations]
         (identify-winner board combo))))))
+
+(defn is-winning-condition-met? [board]
+  (not= nil (find-winning-marker board)))
+
+(defn is-game-over? [board]
+  (or (is-tie-condition-met? board) (is-winning-condition-met? board)))

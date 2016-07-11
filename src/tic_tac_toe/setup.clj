@@ -9,4 +9,4 @@
 
 (defn create-players []
  [(player/create-player "Player 1" "X" (human-move-generator/create-human-move-generator (io/create-io)))
-  (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator (io/create-io)))])
+  (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator "O"))])
