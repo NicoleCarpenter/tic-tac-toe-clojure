@@ -1,36 +1,39 @@
 (ns tic-tac-toe.ttt-board
-  (:require [tic-tac-toe.board :as board]))
+  (:require [tic-tac-toe.board :as b]))
 
 (defrecord TTTBoard []
-  board/Board
+  b/Board
   (place-piece [x board space marker]
-    (assoc board space marker))
+    (assoc board (read-string space) marker))
 
   (find-open-spaces [x board]
-    (keep-indexed #(if (nil? %2) %1) board)))
-
-(defn find-open-spaces [board]
     (keep-indexed #(if (not (string? %2)) %1) board))
 
-(defn row-count [board]
-  (int (Math/sqrt (count board))))
+  (row-count [x board]
+    (int (Math/sqrt (count board))))
+
+  (depth [x board] 
+    (count (b/find-open-spaces x board))))
+
+(defn create-ttt-board []
+  (map->TTTBoard {}))
 
 (defn board-positions [board]
   (range (count board)))
 
 (defn- find-winning-rows [board]
-  (mapv vec (partition (row-count board) (board-positions board))))
+  (mapv vec (partition (b/row-count (create-ttt-board) board) (board-positions board))))
 
 (defn- find-winning-columns [board]
   (apply mapv vector (find-winning-rows board)))
 
 (defn- find-forward-diagonal [board]
-  (let [rows (find-winning-rows board) row-count (row-count board)]
+  (let [rows (find-winning-rows board) row-count (b/row-count (create-ttt-board) board)]
     (for [i (range row-count)]
       (get (get rows i) i))))
 
 (defn- find-backward-diagonal [board]
-  (let [rows (find-winning-rows board) row-count (row-count board)]
+  (let [rows (find-winning-rows board) row-count (b/row-count (create-ttt-board) board)]
     (for [i (range row-count)]
       (get (get rows i) (-(- row-count 1) i)))))
 
@@ -57,17 +60,11 @@
   (let [combo-values (find-values-at-combo-positions board combo)]
     (if (matched-combination? combo-values) (first combo-values) nil)))
 
-(defn create-ttt-board []
-  (map->TTTBoard {}))
-
-(defn depth [board]
-  (count (board/find-open-spaces (create-ttt-board) board)))
-
-(defn place-piece [board space marker]
-  (assoc board (read-string space) marker))
+(defn replace-nil-with-index [board]
+  (vec (keep-indexed #(if (nil? %2) %1 %2) board)))
 
 (defn separate-rows [board]
-  (mapv vec (partition (row-count board) board)))
+  (mapv vec (partition (b/row-count (create-ttt-board) board) board)))
 
 (defn is-tie-condition-met? [board]
   (every? #(string? %) board))

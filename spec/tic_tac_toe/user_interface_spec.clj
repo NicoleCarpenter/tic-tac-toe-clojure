@@ -44,4 +44,19 @@
       (should= "Game over. Nicole won!"
                 @(:value mock-io)))))
 
-(run-specs)
+(describe "print-board"
+
+  (it "returns a printable board string"
+    (let [mock-io (io/mock-value "3")
+          test-ui (test-ui mock-io)
+          board [nil nil nil nil nil nil nil nil nil]]
+      (view/print-board test-ui board)
+      (should= "   |   |  \n===+===+===\n   |   |  \n===+===+===\n   |   |  \n"
+               @(:value mock-io)))))
+
+(describe "clear-screen"
+
+  (it "should call the io method to clear the screen"
+    (let [mock-io (io/mock-value "3")
+          test-ui (test-ui mock-io)]
+      (should= "Clear screen called" (view/clear-screen test-ui)))))
