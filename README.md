@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/NicoleCarpenter/tic-tac-toe-clojure.svg?branch=master)](https://travis-ci.org/NicoleCarpenter/tic-tac-toe-clojure)
+
 # Tic Tac Toe
 
 Tic tac toe is a console application built with Clojure. The classic game of tic tac toe is a two player game where players trade turns placing a mark on a square board until either one player has won, or the game results in a draw. A player can win by placing three consecutive marks, either horizontally, vertically, or diagonally
