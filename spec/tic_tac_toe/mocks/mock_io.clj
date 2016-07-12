@@ -10,10 +10,10 @@
     (reset! value s))
   
   (clear-scr [x]
-    value))
+    "Clear screen called"))
 
 (defn mock-value [input]
   (->MockIO (atom input)))
 
 (defn create-mock-io []
-  (->MockIO))
+  (map->MockIO {}))

@@ -1,5 +1,6 @@
 (ns tic-tac-toe.ttt-board-presenter
-  (:require [tic-tac-toe.ttt-board :as ttt-board]))
+  (:require [tic-tac-toe.board :as b]
+            [tic-tac-toe.ttt-board :as ttt-board]))
 
 (defn- add-leading-spaces [board]
   (for [placeholder board]
@@ -13,7 +14,7 @@
 (defn- construct-filled-row [row vertical-fillers]
   (into [](map vector row vertical-fillers)))
 
-(defn flatten-row [filled-row]
+(defn- flatten-row [filled-row]
   (flatten filled-row))
 
 (defn- append-row-with-new-line [flattened-row]
@@ -43,7 +44,7 @@
 (defn format-board-to-string [board]
   (let [formatted-board (add-leading-spaces board) 
         formatted-rows [] 
-        number-of-rows (ttt-board/row-count board) 
+        number-of-rows (b/row-count (ttt-board/create-ttt-board) board) 
         rows (ttt-board/separate-rows formatted-board)]
     
     (->> 
