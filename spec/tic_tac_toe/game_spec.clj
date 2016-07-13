@@ -18,7 +18,7 @@
           test-ui (create-test-ui mock-io)
           board ["X" "X" "O" "O" "O" "X" "X" "O" nil]
           players [(player/create-player "Player 1" "X" (human-move-generator/create-human-move-generator test-ui))
-                   (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator "O"))]]
+                   (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator ["X" "O"]))]]
       (should= "Display tie message called" (game/play-game board players test-ui))))
 
   (it "displays a winning message when the player wins with the player's name"
@@ -27,7 +27,7 @@
           test-ui (create-test-ui mock-io)
           board ["X" "X" nil "O" "O" nil nil nil nil]
           players [(player/create-player "Player 1" "X" (human-move-generator/create-human-move-generator test-ui))
-                   (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator "O"))]]
+                   (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator ["X" "O"]))]]
       (should= "Display winning message called with Player 1" (game/play-game board players test-ui))))
 
 
@@ -37,5 +37,5 @@
           test-ui (create-test-ui mock-io)
           board ["X" "X" nil "O" "O" nil nil nil nil]
           players [(player/create-player "Player 1" "X" (human-move-generator/create-human-move-generator test-ui))
-                   (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator "O"))]]
+                   (player/create-player "Computer" "O" (computer-move-generator/create-computer-move-generator ["X" "O"]))]]
       (should= "Display winning message called with Computer" (game/play-game board players test-ui)))))

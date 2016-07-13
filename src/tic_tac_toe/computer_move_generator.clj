@@ -4,11 +4,6 @@
             [tic-tac-toe.board :as b]
             [clojure.set :refer :all]))
 
-(defn- get-opponent-marker [current-marker]
-  (if (= current-marker "X")
-    "O"
-    "X"))
-
 (defn- to-set [s]
   (if (set? s) s #{s}))
 
@@ -25,7 +20,7 @@
       -10
       0)))
 
-(defn- minimax [current-marker board index max-player depth original-depth]
+(defn- minimax [current-marker opponent-marker board index max-player depth original-depth]
   (let [ttt-board-rules (ttt-board/create-ttt-board)
         board (b/place-piece ttt-board-rules board (str index) current-marker)
         spaces (b/find-open-spaces ttt-board-rules board)]
@@ -33,31 +28,33 @@
       (* depth (score board max-player))
       (let [max-player (not max-player)]
         (if max-player
-          (apply max (map #(minimax (get-opponent-marker current-marker) board % max-player (dec depth) original-depth) spaces))
-          (apply min (map #(minimax (get-opponent-marker current-marker) board % max-player (dec depth) original-depth) spaces)))))))
+          (apply max (map #(minimax opponent-marker current-marker board % max-player (dec depth) original-depth) spaces))
+          (apply min (map #(minimax opponent-marker current-marker board % max-player (dec depth) original-depth) spaces)))))))
 
 (def mem-minimax (memoize minimax))
 
-(defn- minimax-scores [current-marker board]
+(defn- minimax-scores [markers board]
   (let [ttt-board-rules (ttt-board/create-ttt-board)
         spaces (b/find-open-spaces ttt-board-rules board)
-        depth (b/depth ttt-board-rules board)  
+        depth (b/depth ttt-board-rules board)
         score-map (sorted-map)
         board (ttt-board/replace-nil-with-index board)
-        scored-spaces (map #(hash-map (mem-minimax current-marker board % true depth depth) %) spaces)]
+        opponent-marker (get markers 0)
+        current-marker (get markers 1)
+        scored-spaces (map #(hash-map (mem-minimax current-marker opponent-marker board % true depth depth) %) spaces)]
     (into score-map (score-sets scored-spaces))))
 
 (defn- best-spot [scores]
   (first (to-set (last (vals scores)))))
 
-(defrecord ComputerMoveGenerator [marker]
+(defrecord ComputerMoveGenerator [markers]
   generator/MoveGenerator
     (select-space [x board]
-      (let [scores (minimax-scores marker board)]
+      (let [scores (minimax-scores markers board)]
         (best-spot scores))))
 
 (defn mock-move [move]
   (map->ComputerMoveGenerator (atom move)))
 
-(defn create-computer-move-generator [marker]
-  (map->ComputerMoveGenerator {:marker marker}))
+(defn create-computer-move-generator [markers]
+  (map->ComputerMoveGenerator {:markers markers}))
