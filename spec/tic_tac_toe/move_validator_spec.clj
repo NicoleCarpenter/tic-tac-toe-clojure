@@ -44,6 +44,10 @@
     (let [active-board [nil nil nil nil nil nil nil nil nil]]
       (should= false (validator/is-valid? " " active-board))))
 
+  (it "returns false if the move is a series of empty spaces"
+    (let [active-board [nil nil nil nil nil nil nil nil nil]]
+      (should= false (validator/is-valid? "   " active-board))))
+
   (it "returns false if the move is already taken"
     (let [active-board [\X nil nil nil nil nil nil nil nil]]
       (should= false (validator/is-valid? "0" active-board)))))

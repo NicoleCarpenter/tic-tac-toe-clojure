@@ -1,11 +1,9 @@
 (ns tic-tac-toe.setup
-  (:require [tic-tac-toe.player :as player]
-            [tic-tac-toe.human-move-generator :as hmg]
-            [tic-tac-toe.computer-move-generator :as cmg]))
+  (:require [tic-tac-toe.player :as player]))
 
 (defn create-initial-board [board-size]
   (into [] (repeat board-size nil)))
 
-(defn create-players [ui]
- [(player/create-player "Player 1" "X" (hmg/create-human-move-generator ui))
-  (player/create-player "Computer" "O" (cmg/create-computer-move-generator "O"))])
+(defn create-players [players]
+ [(player/create-player (get (get players 0) :name) (get (get players 0) :marker) (get (get players 0) :move-generator))
+  (player/create-player (get (get players 1) :name) (get (get players 1) :marker) (get (get players 1) :move-generator))])

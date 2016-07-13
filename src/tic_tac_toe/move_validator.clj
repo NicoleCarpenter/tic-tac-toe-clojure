@@ -1,7 +1,7 @@
 (ns tic-tac-toe.move-validator)
 
-(defn- is-valid-number? [move]
-  (and (not= move "") (not= move " ") (integer? (read-string move))))
+(defn- is-valid-number? [move]  
+  (and (false? (clojure.string/blank? move)) (integer? (read-string move))))
 
 (defn- is-valid-space? [move board]
   (if (is-valid-number? move)

@@ -5,11 +5,11 @@
             [tic-tac-toe.mocks.mock-io :as io]
             [tic-tac-toe.mocks.mock-user-interface :as ui]))
 
-(defn- test-computer-move-generator [marker]
-  (computer-gen/create-computer-move-generator marker))
+(defn- test-computer-move-generator [markers]
+  (computer-gen/create-computer-move-generator markers))
 
 (describe "select-space"
-  (let [test-generator (test-computer-move-generator "O")]
+  (let [test-generator (test-computer-move-generator ["X" "O"])]
 
     (it "should force a tie"
       (let [board ["X" "X" "O" "O" "O" "X" "X" "O" nil]]
